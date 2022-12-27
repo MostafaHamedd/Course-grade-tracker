@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tellmore_course_tracker/coursePage.dart';
+import 'courseClass.dart';
+import 'coursePage.dart';
 
 class CoursesPage extends StatefulWidget {
   @override
@@ -6,8 +9,11 @@ class CoursesPage extends StatefulWidget {
 }
 
 class _CoursesPageState extends State<CoursesPage> {
-  final List<String> _courses = ["Course 1", "Course 2", "Course 3"];
-  String _newCourse = "";
+  final List<Course> _courses = [    Course("Course 1", []),
+    Course("Course 2", []),
+    Course("Course 3", [])
+  ];
+  Course _newCourse = new Course("",[]);
 
   @override
   Widget build(BuildContext context) {
@@ -21,27 +27,30 @@ class _CoursesPageState extends State<CoursesPage> {
                 return Container(
                   color: Colors.primaries[index % Colors.primaries.length],
                   child: ListTile(
-                    title: Text(_courses[index]),
+                    title: Text(_courses[index].name),
                     onTap: () {
-                      // Do something when the tile is clicked
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //     builder: (context) => AddAssignmentsScreen(course: _courses[index]));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => coursePage(
+                            course: new Course(_courses[index].name,<Content>[]),
+
+                          ),
+                        ),
+                      );
+                      print("Button presed");
                     },
                     trailing: IconButton(
                       icon: Icon(Icons.add),
                       onPressed: () {
                         _courses.add(_newCourse);
-                        _newCourse = "";
-                        // Do something when the button is clicked
+                        _newCourse = new Course("",[]);
                       },
                     ),
                   ),
                 );
               },
             ),
-
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -50,7 +59,7 @@ class _CoursesPageState extends State<CoursesPage> {
                 labelText: "Add a new course",
               ),
               onChanged: (value) {
-                _newCourse = value;
+                _newCourse = Course(value, []);
               },
             ),
           ),
@@ -70,4 +79,3 @@ class _CoursesPageState extends State<CoursesPage> {
     );
   }
 }
-
