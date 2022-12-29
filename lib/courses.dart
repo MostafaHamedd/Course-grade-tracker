@@ -9,11 +9,11 @@ class CoursesPage extends StatefulWidget {
 }
 
 class _CoursesPageState extends State<CoursesPage> {
-  final List<Course> _courses = [    Course("Course 1", []),
-    Course("Course 2", []),
-    Course("Course 3", [])
+  final List<Course> _courses = [    Course("Course 1", [],0),
+    Course("Course 2", [],0),
+    Course("Course 3", [],0)
   ];
-  Course _newCourse = new Course("",[]);
+  Course _newCourse = new Course("",[],0);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class _CoursesPageState extends State<CoursesPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => coursePage(
-                            course: new Course(_courses[index].name,<Content>[]),
+                            course: new Course(_courses[index].name,<Content>[],0),
 
                           ),
                         ),
@@ -44,7 +44,7 @@ class _CoursesPageState extends State<CoursesPage> {
                       icon: Icon(Icons.add),
                       onPressed: () {
                         _courses.add(_newCourse);
-                        _newCourse = new Course("",[]);
+                        _newCourse = new Course("",[],0);
                       },
                     ),
                   ),
@@ -59,7 +59,7 @@ class _CoursesPageState extends State<CoursesPage> {
                 labelText: "Add a new course",
               ),
               onChanged: (value) {
-                _newCourse = Course(value, []);
+                _newCourse = Course(value, [],0);
               },
             ),
           ),

@@ -19,6 +19,7 @@ class coursePage extends StatefulWidget {
 
 class _coursePageState extends State<coursePage> {
   String testGrade = "0";
+  bool calculated = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,10 +55,10 @@ class _coursePageState extends State<coursePage> {
                       //   labelText: "Name",
                       // )),
                       TextFormField(
-                           controller:contentWeightController ,
+                          controller: contentWeightController,
                           decoration: InputDecoration(
-                        labelText: "Weight (in %)",
-                      )),
+                            labelText: "Weight (in %)",
+                          )),
                       DropdownButtonFormField(
 
                           // value: contentType,
@@ -96,7 +97,7 @@ class _coursePageState extends State<coursePage> {
                           ],
                           onChanged: (value) {
                             setState(() {
-                              contentType = value.toString() ;
+                              contentType = value.toString();
                               //      _selectedType = value;
                             });
                           })
@@ -110,7 +111,6 @@ class _coursePageState extends State<coursePage> {
                       primary: Colors.black,
                     ),
                     onPressed: () {
-
                       Navigator.of(context).pop();
                     },
                   ),
@@ -121,12 +121,15 @@ class _coursePageState extends State<coursePage> {
                     ),
                     onPressed: () {
                       print(contentWeightController.text);
-                      widget.course.addAssesment(new Content(contentType,double.parse(contentWeightController.text),[],0)) ;
+                      widget.course.addAssesment(new Content(
+                          contentType,
+                          double.parse(contentWeightController.text),
+                          [],
+                          0,
+                          false));
                       print(widget.course.content.length);
                       Navigator.of(context).pop();
-                      setState(() {
-
-                      });
+                      setState(() {});
                     },
                   ),
                 ],
@@ -136,76 +139,223 @@ class _coursePageState extends State<coursePage> {
     );
   }
 
+  String getGrade() {
+    if (!calculated) {
+      return "";
+    }
+    return widget.course.getScoreNeeded(widget.course.desiredGrade).toString();
+  }
+
   Widget courseContent() {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 25, 250, 0),
-          child: Container(
-            child: Text(
-              "Current Grade: ",
-              style: TextStyle(fontSize: 20),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+            child: Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Grade Needed: ",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                  ),
+                ],
+              ),
             ),
           ),
+          progressBar(),
+          Text(getGrade(),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
+
+
+          assesmentContainer(),
+
+          targetGrade(),
+          calculateButton(),
+        ],
+      ),
+    );
+  }
+
+  Widget targetGrade(){
+    return  Row(
+      children: [
+        SizedBox(
+          height: 50,
         ),
-        Container(
-          height : 300 ,
-          child: ListView.builder(
-
-            itemCount: widget.course.content.length,
-            itemBuilder: (context, index) {
-              Content assesment =  widget.course.content[index] ;
-              return ListTile(
-                  leading: Icon(Icons.assignment),
-                  title: Text(assesment.name),
-                  subtitle: Text("Weight: " +assesment.weight.toString()+"%"),
-                  trailing: Text("Grade: " +assesment.grade.toString() + "%"),
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text("Grade Earned"),
-
-                            content: TextField(
-                              decoration: InputDecoration(
-                                labelText: "Enter grade awarded",
-                              ),
-                              keyboardType: TextInputType.number,
-                              onChanged: (value) {
-                                setState(() {
-
-                                  testGrade = value;
-                                  print("Here");
-                                  print(widget.course.content.length);
-                                });
-                              },
-                            ),
-                            actions: [
-                              ElevatedButton(
-                                child: Text("Cancel"),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                              ElevatedButton(
-                                child: Text("Submit"),
-                                onPressed: () {
-                                  assesment.grade = double.parse(testGrade) ;
-                                  setState(() {
-
-                                  });
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        });
+        Text("Target Grade: ",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+        SizedBox(
+          width: 10,
+        ),
+        Text(widget.course.getTargetGrade(),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+      ],
+    );
+  }
+  Widget calculateButton(){
+    return   Padding(
+      padding: const EdgeInsets.fromLTRB(0, 150, 0, 0),
+      child: Expanded(
+        child: SizedBox(
+          width: 120,
+          height: 55,
+          child: ElevatedButton(
+            child: Text("Calculate"),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.black,
+            ),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    TextEditingController gradeEnteredController =
+                    TextEditingController();
+                    double gradeEntered = 0;
+                    return AlertDialog(
+                      title: Text("Calculate"),
+                      content: TextField(
+                        controller: gradeEnteredController,
+                        decoration: InputDecoration(
+                          labelText: "Enter desired grade",
+                        ),
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          setState(() {
+                            gradeEntered =
+                                double.parse(gradeEnteredController.text);
+                          });
+                        },
+                      ),
+                      actions: [
+                        ElevatedButton(
+                            child: Text("Cancel"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.black,
+                            )),
+                        ElevatedButton(
+                            child: Text("Calculate"),
+                            onPressed: () {
+                              print(gradeEntered);
+                              if (widget.course
+                                  .isPossible(gradeEntered)) {
+                                widget.course.desiredGrade = gradeEntered;
+                                calculated = true;
+                                Navigator.of(context).pop();
+                                setState(() {});
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.black,
+                            )),
+                      ],
+                    );
                   });
             },
           ),
         ),
-      ],
-    );
+      ),
+    ) ;
+  }
+  Widget assesmentContainer(){
+    return  Container(
+      height: 350,
+      child: ListView.builder(
+        itemCount: widget.course.content.length,
+        itemBuilder: (context, index) {
+          Content assesment = widget.course.content[index];
+          return Dismissible(
+            direction: DismissDirection.endToStart,
+            key: UniqueKey(),
+            // specify a unique key for the Dismissible widget
+            background: Container(
+              color: Colors.green,
+              child: Text(
+                "Delete",
+                style: TextStyle(color: Colors.white, fontSize: 30),
+              ),
+            ), // specify the background color when swiping
+            secondaryBackground: Container(
+                color: Colors.red,
+                child: Center(
+                    child: Text(
+                      "Delete",
+                      style: TextStyle(color: Colors.white, fontSize: 30),
+                    ))), // specify the secondary background color (e.g. for an undo action)
+            onDismissed: (direction) {
+              widget.course.content.remove(assesment);
+              setState(() {});
+
+            },
+            child: ListTile(
+                leading: assesment.getIcon(),
+                title: Text(assesment.name),
+                subtitle:
+                Text("Weight: " + assesment.weight.toString() + "%"),
+                trailing:
+                Text("Grade: " + assesment.grade.toString() + "%"),
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text("Grade Earned"),
+                          content: TextField(
+                            decoration: InputDecoration(
+                              labelText: "Enter grade awarded",
+                            ),
+                            keyboardType: TextInputType.number,
+                            onChanged: (value) {
+                              setState(() {
+                                testGrade = value;
+                                print("Here");
+                                print(widget.course.content.length);
+                              });
+                            },
+                          ),
+                          actions: [
+                            ElevatedButton(
+                                child: Text("Cancel"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.black,
+                                )),
+                            ElevatedButton(
+                                child: Text("Submit"),
+                                onPressed: () {
+                                  assesment.grade =
+                                      double.parse(testGrade);
+                                  if (assesment.isAttainable()) {
+                                    assesment.completed = true;
+                                    setState(() {});
+                                    Navigator.of(context).pop();
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.black,
+                                )),
+                          ],
+                        );
+                      });
+                }),
+          );
+        },
+      ),
+    ) ;
+  }
+  Widget progressBar(){
+    return           LinearProgressIndicator(
+      value: widget.course.gradeNeeded(widget.course.desiredGrade) /
+          100, // currentGrade is the current percentage of the grades, divided by 100 to convert it to a value between 0 and 1
+      backgroundColor: Colors.grey[200],
+      valueColor: AlwaysStoppedAnimation(Colors.blue),
+    ) ;
+
   }
 }
