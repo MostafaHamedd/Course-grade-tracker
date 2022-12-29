@@ -1,16 +1,12 @@
-# tellmore_course_tracker
+# Course Tracker App 
 
-A new Flutter project.
+#### This Flutter app helps students keep track of their courses and progress. students can add a course, specify their target grade and the app will calculate what they need to score on future assessments in order to reach their goal.
 
-## Getting Started
+## Track courses and coursework
+- ### The helps students keep track of their courses and coursework. When you first open the app, you'll see a list of your courses. You can tap on a course to see all the work you have to do for that course.
 
-This project is a starting point for a Flutter application.
+## Add courses
+- ### To add a new course, just type the course name into the text field at the bottom of the screen and tap the "Add Course" button. You can also add a course by tapping the "Add" button next to an existing course.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### This app is designed to be simple and easy to use, so you can stay organized and on top of your coursework. Try it out and see how it can help you stay on track with your studies!
