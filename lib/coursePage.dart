@@ -25,12 +25,40 @@ class _coursePageState extends State<coursePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ReusableWidgets().getBackgroundColor(),
-      appBar: ReusableWidgets().appBar(widget.course.name),
+
+      appBar:
+       AppBar(
+        title: Text(widget.course.name),
+        leading:IconButton(
+          icon: Icon(Icons.arrow_back),onPressed: (){
+            Navigator.pop(context);
+        },
+        ),
+        backgroundColor: Color.fromRGBO(0, 171, 179, 2) ,
+      ) ,
       body: courseContent(),
       floatingActionButton: myFloatingButton(),
+      endDrawer:appDrawer(),
     );
   }
+Widget appDrawer(){
+  return Drawer(
+    child:ListView(
+      children: [
+        Container(height:200,color: Colors.black,),
+        InkWell(
+          child: ListTile(
+            leading:  Icon(Icons.auto_graph),
+            title: Text("Course progress  (Coming soon!)")
+          ),
+          onTap: (){},
+        )
 
+      ]
+
+    ));
+
+}
   Widget myFloatingButton() {
     String contentName = '';
     String contentWeight = '';
@@ -45,7 +73,7 @@ class _coursePageState extends State<coursePage> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: Text("Add Content"),
+                title: Text("Add assesment"),
                 //key: ,
                 content: Form(
                   child: Column(
@@ -179,35 +207,40 @@ class _coursePageState extends State<coursePage> {
           progressBar(),
           assesmentContainer(),
           targetGrade(),
-          SliderTheme(
-            data: SliderTheme.of(context).copyWith(
-              activeTrackColor: Colors.blue,
-              inactiveTrackColor: Colors.blue,
-              trackShape: RectangularSliderTrackShape(),
-              trackHeight: 20.0,
-              thumbColor: Colors.blueAccent,
-              thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12.0),
-              overlayColor: Colors.red.withAlpha(32),
-              overlayShape: RoundSliderOverlayShape(overlayRadius: 28.0),
-            ),
-            child: Slider(
-              value:  widget.course.desiredGrade,
-              min: 0,
-              max: 100,
-              divisions: 20,
-              thumbColor: Colors.black,
-              label:widget.course.desiredGrade.toString() ,
-              onChanged: (double value) {
-                calculated= true ;
-                widget.course.desiredGrade= value ;
-                setState(() {});
-              },
-            ),
-          ),
+          targetSlider(),
+
+
           calculateButton(),
         ],
       ),
     );
+  }
+
+  Widget targetSlider(){
+   return SliderTheme(
+      data: SliderTheme.of(context).copyWith(
+        activeTrackColor: ReusableWidgets().getButtonsColor(),
+        inactiveTrackColor: ReusableWidgets().progressBarBackgroundColor(),
+        trackShape: RoundedRectSliderTrackShape(),
+        trackHeight: 10.0,
+        thumbColor: Colors.black,
+        thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8.0),
+        overlayColor: Colors.indigo.withAlpha(32),
+        overlayShape: RoundSliderOverlayShape(overlayRadius: 12.0),
+      ),
+      child: Slider(
+        value: widget.course.desiredGrade,
+        min: 0,
+        max: 100,
+        divisions: 20,
+        label: widget.course.desiredGrade.toString(),
+        onChanged: (double value) {
+          calculated = true;
+          widget.course.desiredGrade = value;
+          setState(() {});
+        },
+      ),
+    ) ;
   }
 
   Widget targetGrade() {

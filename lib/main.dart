@@ -6,6 +6,7 @@ import 'reusableWidgets.dart' ;
 void main() {
   runApp(
   MyApp());
+
 }
 
 
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Grade Tracker',
       home: new pageScaffold() ,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
