@@ -32,6 +32,7 @@ class _pageScaffoldState extends State<pageScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ReusableWidgets().getBackgroundColor(),
       appBar: ReusableWidgets().appBar("Tellmore's Grade tracker") ,
       body: homePageBody(context),
     );

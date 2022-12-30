@@ -1,7 +1,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
-import 'reusableWidgets.dart' ;
+import 'package:flutter/widgets.dart';
+
+
+
 class Course {
   String name;
   List<Content> content ;
@@ -29,9 +32,27 @@ class Course {
     }
   }
 
+  double getAssesmentSum() {
+    double totalWeight = 0;
+
+    if (content.length != 0) {
+      for (Content content in content) {
+
+          totalWeight += content.weight;
+
+      }
+    }
+    return totalWeight;
+
+  }
+
+  bool isFeaseable(double weight){
+    return getAssesmentSum()+weight <=100 && weight > 0 ;
+  }
+
+
 
   double gradeNeeded(double desiredGrade){
-    print("$desiredGrade Testing");
 
     double scoreNeeded = 0 ;
     double totalEarned = 0;
@@ -105,40 +126,41 @@ class Course {
 
 
 class Content {
-   String name ;
-   double weight ;
-   List<String> elements;
-   double grade;
-   bool completed ;
-   Content(this.name, this.weight,this.elements,this.grade,this.completed){
-     this.name = name ;
-     this.weight = weight ;
-     this.elements = elements ;
-     this.grade = grade ;
-     this.completed = false;
+  String name ;
+  double weight ;
+  List<String> elements;
+  double grade;
+  bool completed ;
+  Content(this.name, this.weight,this.elements,this.grade,this.completed){
+  this.name = name ;
+  this.weight = weight ;
+  this.elements = elements ;
+  this.grade = grade ;
+  this.completed = false;
 
-   }
+  }
 
-   Icon getIcon(){
-     if(completed)
-       return Icon(Icons.done) ;
+  Icon getIcon(){
+  if(completed)
+  return Icon(Icons.done) ;
 
-     return Icon(Icons.assignment) ;
-   }
-
-
-   bool isAttainable(){
-     return grade <= weight ;
-   }
+  return Icon(Icons.assignment) ;
+  }
 
 
-   double calculateWeightPerElement() {
-     return weight / elements.length;
-   }
+  bool isAttainable(double grade){
+  return grade <= weight && grade >= 0;
+  }
 
-   void addElements(int numElements) {
-     for (int i = 1; i <= numElements; i++) {
-       elements.add("$name $i");
-     }
-   }
-}
+
+  double calculateWeightPerElement() {
+  return weight / elements.length;
+  }
+
+  void addElements(int numElements) {
+  for (int i = 1; i <= numElements; i++) {
+  elements.add("$name $i");
+  }
+  }
+  }
+

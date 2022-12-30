@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tellmore_course_tracker/coursePage.dart';
 import 'courseClass.dart';
 import 'coursePage.dart';
+import 'reusableWidgets.dart' ;
 
 class CoursesPage extends StatefulWidget {
   @override
@@ -17,8 +18,10 @@ class _CoursesPageState extends State<CoursesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Column(
+    return Scaffold(
+       appBar: ReusableWidgets().appBar("Courses"),
+      backgroundColor: ReusableWidgets().getBackgroundColor(),
+      body: Column(
         children: <Widget>[
           Expanded(
             child: ListView.builder(
@@ -65,8 +68,9 @@ class _CoursesPageState extends State<CoursesPage> {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              // Set the button color to black
+            primary: ReusableWidgets().getButtonsColor()
             ),
+
             child: Text("Add Course"),
             onPressed: () {
               setState(() {
