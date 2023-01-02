@@ -35,7 +35,10 @@ class _coursePageState extends State<coursePage> {
         ),
         backgroundColor: Color.fromRGBO(0, 171, 179, 2),
       ),
-      body: courseContent(),
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: courseContent(),
+      ),
       floatingActionButton: myFloatingButton(),
       endDrawer: appDrawer(),
     );
@@ -243,33 +246,55 @@ class _coursePageState extends State<coursePage> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
-            child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Grade Needed: ",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-                  ),
-                ],
+            child: Card(
+              color: Colors.black45,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              elevation: 5.0,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Text(
+                      "Grade Needed",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    progressBar(),
+                    SizedBox(
+                      height: 15,
+                    )
+                  ],
+                ),
               ),
             ),
           ),
-          progressBar(),
           assesmentContainer(),
-          Container(
-              height: 130,
-              decoration: BoxDecoration(
+          Padding(
+            padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+            child: Card(
                 color: Colors.black45,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              child: Column(
-                children: [
-                  targetGrade(),
-                  targetSlider(),
-                ],
-              )),
-
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                elevation: 5.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      targetGrade(),
+                      targetSlider(),
+                      SizedBox(
+                        height: 20,
+                      )
+                    ],
+                  ),
+                )),
+          ),
         ],
       ),
     );
@@ -278,7 +303,7 @@ class _coursePageState extends State<coursePage> {
   Widget targetSlider() {
     return SliderTheme(
       data: SliderTheme.of(context).copyWith(
-        activeTrackColor: ReusableWidgets().getButtonsColor(),
+        activeTrackColor: ReusableWidgets().progressBarValueColor(),
         inactiveTrackColor: ReusableWidgets().progressBarBackgroundColor(),
         trackShape: RoundedRectSliderTrackShape(),
         trackHeight: 10.0,
@@ -291,11 +316,11 @@ class _coursePageState extends State<coursePage> {
         value: widget.course.desiredGrade,
         min: 0,
         max: 100,
-        divisions: 20,
+        divisions: null,
         label: widget.course.desiredGrade.toString(),
         onChanged: (double value) {
           calculated = true;
-          widget.course.desiredGrade = value;
+          widget.course.desiredGrade = value.roundToDouble();
           setState(() {});
         },
       ),
@@ -303,22 +328,25 @@ class _coursePageState extends State<coursePage> {
   }
 
   Widget targetGrade() {
-    return Row(
-      children: [
-        SizedBox(
-          height: 50,
-        ),
-        Text("Target Grade: ",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                color: Colors.white)),
-        SizedBox(
-          width: 10,
-        ),
-        Text(widget.course.getTargetGrade(),
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Text("Target Grade",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Colors.white)),
+          SizedBox(
+            height: 10,
+          ),
+          Text(widget.course.getTargetGrade(),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+          SizedBox(
+            height: 10,
+          ),
+        ],
+      ),
     );
   }
 
@@ -363,7 +391,8 @@ class _coursePageState extends State<coursePage> {
                               Navigator.of(context).pop();
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: ReusableWidgets().getButtonsColor(),
+                              backgroundColor:
+                                  ReusableWidgets().getButtonsColor(),
                             )),
                         ElevatedButton(
                             child: Text("Calculate"),
@@ -376,7 +405,8 @@ class _coursePageState extends State<coursePage> {
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: ReusableWidgets().getButtonsColor(),
+                              backgroundColor:
+                                  ReusableWidgets().getButtonsColor(),
                             )),
                       ],
                     );
@@ -389,90 +419,97 @@ class _coursePageState extends State<coursePage> {
   }
 
   Widget assesmentContainer() {
-    return Container(
-      height: 350,
-      child: ListView.builder(
-        itemCount: widget.course.content.length,
-        itemBuilder: (context, index) {
-          Content assesment = widget.course.content[index];
-          return Dismissible(
-            direction: DismissDirection.endToStart,
-            key: UniqueKey(),
-            // specify a unique key for the Dismissible widget
-            background: Container(
-              color: Colors.green,
-              child: Text(
-                "Delete",
-                style: TextStyle(color: Colors.white, fontSize: 30),
-              ),
-            ), // specify the background color when swiping
-            secondaryBackground: Container(
-                color: Colors.red,
-                child: Center(
-                    child: Text(
+    if (widget.course.content.isNotEmpty) {
+      return Container(
+        height: 350,
+        child: ListView.builder(
+          itemCount: widget.course.content.length,
+          itemBuilder: (context, index) {
+            Content assesment = widget.course.content[index];
+            return Dismissible(
+              direction: DismissDirection.endToStart,
+              key: UniqueKey(),
+              // specify a unique key for the Dismissible widget
+              background: Container(
+                color: Colors.green,
+                child: Text(
                   "Delete",
                   style: TextStyle(color: Colors.white, fontSize: 30),
-                ))), // specify the secondary background color (e.g. for an undo action)
-            onDismissed: (direction) {
-              widget.course.content.remove(assesment);
-              setState(() {});
-            },
-            child: ListTile(
-                leading: assesment.getIcon(),
-                title: Text(assesment.name),
-                subtitle: Text("Weight: " + assesment.weight.toString() + "%"),
-                trailing: Text("Grade: " + assesment.grade.toString() + "%"),
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text("Grade Earned"),
-                          content: TextField(
-                            decoration: InputDecoration(
-                              labelText: "Enter grade awarded",
+                ),
+              ), // specify the background color when swiping
+              secondaryBackground: Container(
+                  color: Colors.red,
+                  child: Center(
+                      child: Text(
+                    "Delete",
+                    style: TextStyle(color: Colors.white, fontSize: 30),
+                  ))), // specify the secondary background color (e.g. for an undo action)
+              onDismissed: (direction) {
+                widget.course.content.remove(assesment);
+                setState(() {});
+              },
+              child: ListTile(
+                  leading: assesment.getIcon(),
+                  title: Text(assesment.name),
+                  subtitle:
+                      Text("Weight: " + assesment.weight.toString() + "%"),
+                  trailing: Text("Grade: " + assesment.grade.toString() + "%"),
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text("Grade Earned"),
+                            content: TextField(
+                              decoration: InputDecoration(
+                                labelText: "Enter grade awarded",
+                              ),
+                              keyboardType: TextInputType.number,
+                              onChanged: (value) {
+                                setState(() {
+                                  testGrade = value;
+                                });
+                              },
                             ),
-                            keyboardType: TextInputType.number,
-                            onChanged: (value) {
-                              setState(() {
-                                testGrade = value;
-                              });
-                            },
-                          ),
-                          actions: [
-                            ElevatedButton(
-                                child: Text("Cancel"),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: ReusableWidgets().getButtonsColor(),
-                                )),
-                            ElevatedButton(
-                                child: Text("Submit"),
-                                onPressed: () {
-                                  if (assesment
-                                      .isAttainable(double.parse(testGrade))) {
-                                    assesment.grade = double.parse(testGrade);
-                                    assesment.completed = true;
-                                    setState(() {});
+                            actions: [
+                              ElevatedButton(
+                                  child: Text("Cancel"),
+                                  onPressed: () {
                                     Navigator.of(context).pop();
-                                  } else {
-                                    ReusableWidgets().showToast(
-                                        "Grade has to be less than or equal assessment weight");
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: ReusableWidgets().getButtonsColor(),
-                                )),
-                          ],
-                        );
-                      });
-                }),
-          );
-        },
-      ),
-    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        ReusableWidgets().getButtonsColor(),
+                                  )),
+                              ElevatedButton(
+                                  child: Text("Submit"),
+                                  onPressed: () {
+                                    if (assesment.isAttainable(
+                                        double.parse(testGrade))) {
+                                      assesment.grade = double.parse(testGrade);
+                                      assesment.completed = true;
+                                      setState(() {});
+                                      Navigator.of(context).pop();
+                                    } else {
+                                      ReusableWidgets().showToast(
+                                          "Grade has to be less than or equal assessment weight");
+                                    }
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        ReusableWidgets().getButtonsColor(),
+                                  )),
+                            ],
+                          );
+                        });
+                  }),
+            );
+          },
+        ),
+      );
+    } else {
+      return Container(height:350,child: Center(child: Text("No assesments added", style: TextStyle(color: Colors.black, fontSize: 30)),),);
+    }
   }
 
   Widget progressBar() {

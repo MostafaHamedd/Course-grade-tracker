@@ -32,6 +32,7 @@ class ReusableWidgets{
     return Color.fromRGBO(200, 200, 200, 2);
    }
     Color progressBarValueColor(){
-      return Color.fromRGBO(0, 171, 179, 2) ;
+       return Color.fromRGBO(0, 171, 179, 2) ;
+      // return Colors.blueAccent;
     }
 }
