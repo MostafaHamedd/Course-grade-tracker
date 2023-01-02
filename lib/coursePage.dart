@@ -25,40 +25,91 @@ class _coursePageState extends State<coursePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ReusableWidgets().getBackgroundColor(),
-
-      appBar:
-       AppBar(
+      appBar: AppBar(
         title: Text(widget.course.name),
-        leading:IconButton(
-          icon: Icon(Icons.arrow_back),onPressed: (){
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
             Navigator.pop(context);
-        },
+          },
         ),
-        backgroundColor: Color.fromRGBO(0, 171, 179, 2) ,
-      ) ,
+        backgroundColor: Color.fromRGBO(0, 171, 179, 2),
+      ),
       body: courseContent(),
       floatingActionButton: myFloatingButton(),
-      endDrawer:appDrawer(),
+      endDrawer: appDrawer(),
     );
   }
-Widget appDrawer(){
-  return Drawer(
-    child:ListView(
-      children: [
-        Container(height:200,color: Colors.black,),
-        InkWell(
-          child: ListTile(
-            leading:  Icon(Icons.auto_graph),
-            title: Text("Course progress  (Coming soon!)")
-          ),
-          onTap: (){},
-        )
 
-      ]
+  Widget appDrawer() {
+    return Drawer(
+        child: ListView(children: [
+      Container(
+        height: 200,
+        color: Colors.black,
+      ),
+      InkWell(
+        child: ListTile(
+            leading: Icon(Icons.auto_graph),
+            title: Text("Course progress  (Coming soon!)")),
+        onTap: () {},
+      ),
+      InkWell(
+        child: ListTile(
+            leading: Icon(Icons.add_circle),
+            title: Text("Set target manually")),
+        onTap: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                TextEditingController gradeEnteredController =
+                    TextEditingController();
+                double gradeEntered = 0;
+                return AlertDialog(
+                  title: Text("Calculate"),
+                  content: TextField(
+                    controller: gradeEnteredController,
+                    decoration: InputDecoration(
+                      labelText: "Set target grade",
+                    ),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      setState(() {
+                        gradeEntered =
+                            double.parse(gradeEnteredController.text);
+                      });
+                    },
+                  ),
+                  actions: [
+                    ElevatedButton(
+                        child: Text("Cancel"),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ReusableWidgets().getButtonsColor(),
+                        )),
+                    ElevatedButton(
+                        child: Text("Calculate"),
+                        onPressed: () {
+                          if (widget.course.isPossible(gradeEntered)) {
+                            widget.course.desiredGrade = gradeEntered;
+                            calculated = true;
+                            Navigator.of(context).pop();
+                            setState(() {});
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ReusableWidgets().getButtonsColor(),
+                        )),
+                  ],
+                );
+              });
+        },
+      )
+    ]));
+  }
 
-    ));
-
-}
   Widget myFloatingButton() {
     String contentName = '';
     String contentWeight = '';
@@ -138,7 +189,7 @@ Widget appDrawer(){
                   ElevatedButton(
                     child: Text("Cancel"),
                     style: ElevatedButton.styleFrom(
-                      primary: ReusableWidgets().getButtonsColor(),
+                      backgroundColor: ReusableWidgets().getButtonsColor(),
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -147,7 +198,7 @@ Widget appDrawer(){
                   ElevatedButton(
                     child: Text("Create"),
                     style: ElevatedButton.styleFrom(
-                      primary: ReusableWidgets().getButtonsColor(),
+                      backgroundColor: ReusableWidgets().getButtonsColor(),
                     ),
                     onPressed: () {
                       if (contentType.isNotEmpty &&
@@ -206,18 +257,26 @@ Widget appDrawer(){
           ),
           progressBar(),
           assesmentContainer(),
-          targetGrade(),
-          targetSlider(),
+          Container(
+              height: 130,
+              decoration: BoxDecoration(
+                color: Colors.black45,
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Column(
+                children: [
+                  targetGrade(),
+                  targetSlider(),
+                ],
+              )),
 
-
-          calculateButton(),
         ],
       ),
     );
   }
 
-  Widget targetSlider(){
-   return SliderTheme(
+  Widget targetSlider() {
+    return SliderTheme(
       data: SliderTheme.of(context).copyWith(
         activeTrackColor: ReusableWidgets().getButtonsColor(),
         inactiveTrackColor: ReusableWidgets().progressBarBackgroundColor(),
@@ -240,7 +299,7 @@ Widget appDrawer(){
           setState(() {});
         },
       ),
-    ) ;
+    );
   }
 
   Widget targetGrade() {
@@ -250,7 +309,10 @@ Widget appDrawer(){
           height: 50,
         ),
         Text("Target Grade: ",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Colors.white)),
         SizedBox(
           width: 10,
         ),
@@ -270,7 +332,7 @@ Widget appDrawer(){
           child: ElevatedButton(
             child: Text("Set a Target"),
             style: ElevatedButton.styleFrom(
-              primary: ReusableWidgets().getButtonsColor(),
+              backgroundColor: ReusableWidgets().getButtonsColor(),
             ),
             onPressed: () {
               showDialog(
@@ -301,7 +363,7 @@ Widget appDrawer(){
                               Navigator.of(context).pop();
                             },
                             style: ElevatedButton.styleFrom(
-                              primary: ReusableWidgets().getButtonsColor(),
+                              backgroundColor: ReusableWidgets().getButtonsColor(),
                             )),
                         ElevatedButton(
                             child: Text("Calculate"),
@@ -314,7 +376,7 @@ Widget appDrawer(){
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              primary: ReusableWidgets().getButtonsColor(),
+                              backgroundColor: ReusableWidgets().getButtonsColor(),
                             )),
                       ],
                     );
@@ -384,7 +446,7 @@ Widget appDrawer(){
                                   Navigator.of(context).pop();
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: ReusableWidgets().getButtonsColor(),
+                                  backgroundColor: ReusableWidgets().getButtonsColor(),
                                 )),
                             ElevatedButton(
                                 child: Text("Submit"),
@@ -401,7 +463,7 @@ Widget appDrawer(){
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: ReusableWidgets().getButtonsColor(),
+                                  backgroundColor: ReusableWidgets().getButtonsColor(),
                                 )),
                           ],
                         );

@@ -19,6 +19,7 @@ class _CoursesPageState extends State<CoursesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: myFloatingButton(),
        appBar: ReusableWidgets().appBar("Courses"),
       backgroundColor: ReusableWidgets().getBackgroundColor(),
       body: Column(
@@ -41,7 +42,7 @@ class _CoursesPageState extends State<CoursesPage> {
                           ),
                         ),
                       );
-                      print("Button presed");
+
                     },
                     trailing: IconButton(
                       icon: Icon(Icons.add),
@@ -55,31 +56,89 @@ class _CoursesPageState extends State<CoursesPage> {
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              decoration: InputDecoration(
-                labelText: "Add a new course",
-              ),
-              onChanged: (value) {
-                _newCourse = Course(value, [],0);
-              },
-            ),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-            primary: ReusableWidgets().getButtonsColor()
-            ),
-
-            child: Text("Add Course"),
-            onPressed: () {
-              setState(() {
-                _courses.add(_newCourse);
-              });
-            },
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: TextField(
+          //     decoration: InputDecoration(
+          //       labelText: "Add a new course",
+          //     ),
+          //     onChanged: (value) {
+          //       _newCourse = Course(value, [],0);
+          //     },
+          //   ),
+          // ),
+          // ElevatedButton(
+          //   style: ElevatedButton.styleFrom(
+          //   primary: ReusableWidgets().getButtonsColor()
+          //   ),
+          //
+          //   child: Text("Add Course"),
+          //   onPressed: () {
+          //     setState(() {
+          //       _courses.add(_newCourse);
+          //     });
+          //   },
+          // ),
         ],
       ),
     );
+  }
+  Widget myFloatingButton(){
+    return FloatingActionButton(onPressed: (){
+     showDialog(context: context, builder: (context){
+       TextEditingController contentNameController = TextEditingController();
+       Course newCourse = new Course("",[],0) ;
+       return AlertDialog(
+
+         title: Text("Add course"),
+         content: Form(
+           child: Column(
+             mainAxisSize: MainAxisSize.min,
+             children: [
+               TextFormField(
+                   controller: contentNameController,
+                   decoration: InputDecoration(
+                     labelText: "Course name",
+                   ),
+                 onChanged: (value){
+                     newCourse.name = value.toString() ;
+                 },
+               ),
+             ],
+
+           ),
+
+         ),
+         actions: [
+       ElevatedButton(
+       child: Text("Cancel"),
+       style: ElevatedButton.styleFrom(
+       backgroundColor: ReusableWidgets().getButtonsColor(),
+       ),
+       onPressed: () {
+       Navigator.of(context).pop();
+       },
+       ),
+       ElevatedButton(
+       child: Text("Create"),
+       style: ElevatedButton.styleFrom(
+       backgroundColor: ReusableWidgets().getButtonsColor(),
+
+       ),
+         onPressed: (){
+         if(newCourse.name.isNotEmpty){
+           _courses.add(newCourse) ;
+           Navigator.pop(context) ;
+           setState(() {
+
+           });
+         }
+         },
+       ),
+
+         ],
+       );
+     }) ;
+    },child: Icon(Icons.add),backgroundColor: ReusableWidgets().getButtonsColor(),);
   }
 }
