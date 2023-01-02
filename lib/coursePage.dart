@@ -53,13 +53,13 @@ class _coursePageState extends State<coursePage> {
       ),
       InkWell(
         child: ListTile(
-            leading: Icon(Icons.auto_graph),
+            trailing: Icon(Icons.auto_graph),
             title: Text("Course progress  (Coming soon!)")),
         onTap: () {},
       ),
       InkWell(
         child: ListTile(
-            leading: Icon(Icons.add_circle),
+            trailing: Icon(Icons.add_circle),
             title: Text("Set target manually")),
         onTap: () {
           showDialog(
@@ -109,7 +109,13 @@ class _coursePageState extends State<coursePage> {
                 );
               });
         },
-      )
+      ),
+          InkWell(
+            child: ListTile(
+                trailing: Icon(Icons.mail_outlined),
+                title: Text("Contact us")),
+            onTap: () {},
+          ),
     ]));
   }
 
@@ -259,7 +265,7 @@ class _coursePageState extends State<coursePage> {
                     Text(
                       "Grade Needed",
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                          TextStyle(color: Colors.white70,fontWeight: FontWeight.bold, fontSize: 25),
                     ),
                     SizedBox(
                       height: 10,
@@ -336,7 +342,7 @@ class _coursePageState extends State<coursePage> {
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
-                  color: Colors.white)),
+                  color: Colors.white70)),
           SizedBox(
             height: 10,
           ),
