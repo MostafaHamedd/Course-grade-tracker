@@ -9,12 +9,13 @@ class Course {
   String name;
   List<Content> content ;
   double desiredGrade ;
+  bool isCalculated ;
 
-  Course(this.name, this.content,this.desiredGrade){
-    content = <Content>[] ;
-    this.desiredGrade = 0 ;
+  Course(this.name, this.content,this.desiredGrade,this.isCalculated){
+
 
   }
+
   String getTargetGrade(){
     if(desiredGrade!=0){
       return desiredGrade.toString()+"%";
@@ -50,6 +51,29 @@ class Course {
     return getAssesmentSum()+weight <=100 && weight > 0 ;
   }
 
+  double getAverageGrade(){
+    double totalEarned = 0;
+    double totalWeight = 0;
+    bool isThereGrades = false ;
+    if(content.length!=0){
+      for(Content content in content){
+        if(content.completed){
+          totalWeight+=content.weight ;
+          totalEarned+=content.grade ;
+          isThereGrades = true ;
+        }
+
+      }
+
+    }
+    if(!isThereGrades){
+      return 0 ;
+    }
+
+    return ((totalEarned / totalWeight)*100).roundToDouble();
+  }
+
+
 
 
   double gradeNeeded(double desiredGrade){
@@ -72,7 +96,7 @@ class Course {
       scoreNeeded=scoreNeeded/gradeLeft ;
       scoreNeeded*=100 ;
 
-      print("$scoreNeeded Testing output");
+     // print("$scoreNeeded Testing output");
     }else{
       scoreNeeded = 0 ;
 
@@ -80,8 +104,8 @@ class Course {
 
     return scoreNeeded.round().toDouble() ;
   }
-  String getScoreNeeded(double gradee){
-    double grade = gradeNeeded(gradee) ;
+  String getScore(double grade){
+
     if(grade==0){
       return ""  ;
     }
@@ -136,7 +160,7 @@ class Content {
   this.weight = weight ;
   this.elements = elements ;
   this.grade = grade ;
-  this.completed = false;
+
 
   }
 

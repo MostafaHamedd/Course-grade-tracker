@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:tellmore_course_tracker/courseClass.dart';
 import 'reusableWidgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'dataBase.dart';
+import 'contentDb.dart';
 
 class coursePage extends StatefulWidget {
   const coursePage({
@@ -20,7 +23,26 @@ class coursePage extends StatefulWidget {
 
 class _coursePageState extends State<coursePage> {
   String testGrade = "0";
-  bool calculated = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadContents();
+  }
+
+  void _loadContents() async {
+    Database? db = (await contentDatabase().db);
+    final contents = await contentDatabase().getContents(widget.course);
+    for(Content course in contents){
+      print(course.name + " and " + course.weight.toString() + " and "+course.completed.toString()) ;
+    }
+    setState(() {
+      widget.course.content.clear();
+      widget.course.content..addAll(contents);
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,7 +119,7 @@ class _coursePageState extends State<coursePage> {
                         onPressed: () {
                           if (widget.course.isPossible(gradeEntered)) {
                             widget.course.desiredGrade = gradeEntered;
-                            calculated = true;
+                            widget.course.isCalculated = true;
                             Navigator.of(context).pop();
                             setState(() {});
                           }
@@ -110,12 +132,14 @@ class _coursePageState extends State<coursePage> {
               });
         },
       ),
-          InkWell(
-            child: ListTile(
-                trailing: Icon(Icons.mail_outlined),
-                title: Text("Contact us")),
-            onTap: () {},
-          ),
+      InkWell(
+        child: ListTile(
+            trailing: Icon(Icons.mail_outlined), title: Text("Contact us")),
+        onTap: () {
+          double val = widget.course.desiredGrade;
+          print("the desired grade was $val");
+        },
+      ),
     ]));
   }
 
@@ -209,7 +233,9 @@ class _coursePageState extends State<coursePage> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: ReusableWidgets().getButtonsColor(),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
+                      // Database? db = (await database().db) ;
+
                       if (contentType.isNotEmpty &&
                           contentWeightController.text.isNotEmpty) {
                         if (widget.course.isFeaseable(
@@ -220,6 +246,14 @@ class _coursePageState extends State<coursePage> {
                               [],
                               0,
                               false));
+                          contentDatabase().addContent(
+                              widget.course,
+                              new Content(
+                                  contentType,
+                                  double.parse(contentWeightController.text),
+                                  [],
+                                  0,
+                                  false));
                           Navigator.of(context).pop();
                           setState(() {});
                         } else {
@@ -240,10 +274,10 @@ class _coursePageState extends State<coursePage> {
   }
 
   String getGrade() {
-    if (!calculated) {
+    if (!widget.course.isCalculated) {
       return "";
     }
-    return widget.course.getScoreNeeded(widget.course.desiredGrade).toString();
+    return widget.course.getScore(widget.course.gradeNeeded(widget.course.desiredGrade)).toString();
   }
 
   Widget courseContent() {
@@ -264,8 +298,10 @@ class _coursePageState extends State<coursePage> {
                   children: [
                     Text(
                       "Grade Needed",
-                      style:
-                          TextStyle(color: Colors.white70,fontWeight: FontWeight.bold, fontSize: 25),
+                      style: TextStyle(
+                          color: Colors.white70,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25),
                     ),
                     SizedBox(
                       height: 10,
@@ -325,8 +361,10 @@ class _coursePageState extends State<coursePage> {
         divisions: null,
         label: widget.course.desiredGrade.toString(),
         onChanged: (double value) {
-          calculated = true;
+          widget.course.isCalculated = true;
           widget.course.desiredGrade = value.roundToDouble();
+          database().updateDesiredGrade(
+              widget.course.name, widget.course.desiredGrade, widget.course.isCalculated);
           setState(() {});
         },
       ),
@@ -405,7 +443,7 @@ class _coursePageState extends State<coursePage> {
                             onPressed: () {
                               if (widget.course.isPossible(gradeEntered)) {
                                 widget.course.desiredGrade = gradeEntered;
-                                calculated = true;
+                                widget.course.isCalculated = true;
                                 Navigator.of(context).pop();
                                 setState(() {});
                               }
@@ -451,6 +489,7 @@ class _coursePageState extends State<coursePage> {
                     style: TextStyle(color: Colors.white, fontSize: 30),
                   ))), // specify the secondary background color (e.g. for an undo action)
               onDismissed: (direction) {
+                contentDatabase().deleteContent(widget.course,assesment) ;
                 widget.course.content.remove(assesment);
                 setState(() {});
               },
@@ -494,6 +533,7 @@ class _coursePageState extends State<coursePage> {
                                         double.parse(testGrade))) {
                                       assesment.grade = double.parse(testGrade);
                                       assesment.completed = true;
+                                     contentDatabase().updateContent(widget.course,assesment) ;
                                       setState(() {});
                                       Navigator.of(context).pop();
                                     } else {
@@ -514,7 +554,13 @@ class _coursePageState extends State<coursePage> {
         ),
       );
     } else {
-      return Container(height:350,child: Center(child: Text("No assesments added", style: TextStyle(color: Colors.black, fontSize: 30)),),);
+      return Container(
+        height: 350,
+        child: Center(
+          child: Text("No assesments added",
+              style: TextStyle(color: Colors.black, fontSize: 30)),
+        ),
+      );
     }
   }
 
