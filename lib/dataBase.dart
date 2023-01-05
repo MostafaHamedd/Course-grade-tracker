@@ -93,6 +93,17 @@ Future<void> updateDesiredGrade(String courseName, double desiredGrade,bool isCa
       [desiredGrade, isCalculated? 1: 0,courseName]);
 }
 
+Future<void> deleteCourse(String courseName) async {
+  if (_db == null) {
+    throw Exception("Field 'db' has not been initialized.");
+  }
+  await _db?.rawDelete(
+      "DELETE FROM courses WHERE name = ?",
+      [courseName]);
+
+  print("deleted course") ;
+}
+
 }
 
 

@@ -129,6 +129,18 @@ class contentDatabase{
     print("UPDATED Contents") ;
     //getContents(new Course('Comp3190',[],0),);
   }
+  Future<void> deleteContents(Course course) async {
+    String courseName = course.name;
+
+    if (_contentDb == null) {
+      throw Exception("Field 'db' has not been initialized.");
+    }
+    await _contentDb?.rawDelete(
+        "Delete FROM contents WHERE courseName = ?",
+        [courseName]);
+    print("Deleted Contents") ;
+    //getContents(new Course('Comp3190',[],0),);
+  }
 }
 
 

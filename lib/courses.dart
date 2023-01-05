@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:tellmore_course_tracker/coursePage.dart';
+import 'contentDb.dart';
 import 'courseClass.dart';
 import 'coursePage.dart';
 import 'dataBase.dart';
@@ -25,6 +26,7 @@ class _CoursesPageState extends State<CoursesPage> {
   void _loadCourses() async {
     Database? db = (await database().db)  ;
     final courses = await database().getCourses();
+
     setState(() {
 
       _courses.clear();
@@ -33,6 +35,22 @@ class _CoursesPageState extends State<CoursesPage> {
      //   print(course.name + " and " + course.desiredGrade.toString()) ;
      // }
     });
+    _loadContents() ;
+
+  }
+
+  void _loadContents() async {
+
+    for(Course course in _courses) {
+
+      Database? db = (await contentDatabase().db);
+      final contents = await contentDatabase().getContents(course);
+      String name = course.name ;
+      setState(() {
+        course.content.clear();
+        course.content..addAll(contents);
+      });
+    }
   }
 
 
@@ -71,13 +89,41 @@ class _CoursesPageState extends State<CoursesPage> {
                                       fontWeight: FontWeight.bold,
                                       fontSize: 25),)),
                                   Align(
-                                    child: Icon(Icons.more_horiz),
+                                    child:PopupMenuButton(
+                                      color: Colors.grey,
+                                      icon: Icon(Icons.more_vert),
+                                      onSelected: (value) {
+                                        if(value==1){
+                                          deleteCourse(_courses[index]) ;
+                                          setState(() {
+
+                                          });
+                                        }
+                                      },
+                                      itemBuilder: (BuildContext context) {
+                                        return [
+                                          PopupMenuItem(
+                                            value: 1,
+                                            child: Row(
+                                              children: [
+
+                                                Text('Delete'),
+                                                Spacer(),
+                                                Icon(Icons.delete)
+                                              ],
+                                            ),
+                                          ),
+
+                                        ];
+                                      },
+                                    ),
+
+
                                     alignment: Alignment.topRight,
                                   ),
                                 ],
                               ),
 
-                              Divider(height: 10,),
 
                             Align(
                               alignment: Alignment.topLeft,
@@ -198,13 +244,16 @@ class _CoursesPageState extends State<CoursesPage> {
          onPressed: () async {
 
          if(newCourse.name.isNotEmpty){
-
+             if(!_courses.contains(newCourse.name)){
            database().addCourse(newCourse);
            _courses.add(newCourse) ;
            Navigator.pop(context) ;
-           setState(() {
-
-           });
+           setState(() {});
+           }else{
+               ReusableWidgets().showToast("Course already exists") ;
+             }
+         }else{
+           ReusableWidgets().showToast("Please enter a course name") ;
          }
          },
        ),
@@ -213,5 +262,12 @@ class _CoursesPageState extends State<CoursesPage> {
        );
      }) ;
     },child: Icon(Icons.add),backgroundColor: ReusableWidgets().getButtonsColor(),);
+  }
+
+  void deleteCourse(Course course){
+    _courses.remove(course);
+   contentDatabase().deleteContents(course) ;
+   database().deleteCourse(course.name) ;
+
   }
 }

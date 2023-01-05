@@ -27,7 +27,7 @@ class _coursePageState extends State<coursePage> {
   @override
   void initState() {
     super.initState();
-    _loadContents();
+    //_loadContents();
   }
 
   void _loadContents() async {
