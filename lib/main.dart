@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'courses.dart';
 import 'package:page_transition/page_transition.dart';
-import 'reusableWidgets.dart' ;
+import 'reusableWidgets.dart';
 import 'package:slider_button/slider_button.dart';
-import 'dataBase.dart' ;
+import 'dataBase.dart';
 
 void main() {
-  runApp(
-  MyApp());
-
+  runApp(MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -20,11 +17,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Grade Tracker',
-      home: new pageScaffold() ,
+      home: new pageScaffold(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
+
 class pageScaffold extends StatefulWidget {
   const pageScaffold({Key? key}) : super(key: key);
 
@@ -37,13 +35,13 @@ class _pageScaffoldState extends State<pageScaffold> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ReusableWidgets().getBackgroundColor(),
-      appBar: ReusableWidgets().appBar("Tellmore's Grade tracker") ,
-      body:features(),
+      appBar: ReusableWidgets().appBar("Tellmore's Grade tracker"),
+      body: features(),
     );
   }
 
-  Widget features(){
-    int  currPage =0 ;
+  Widget features() {
+    int currPage = 0;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Stack(
@@ -94,18 +92,25 @@ class _pageScaffoldState extends State<pageScaffold> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(20.0),
-                       child:ElevatedButton(
-    onPressed: () {
-
-
-    Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: CoursesPage(),alignment: Alignment.center));
-    },
-    child: const Text('Get Started'),
-    style: ButtonStyle(
-    backgroundColor: MaterialStateProperty.all(Colors.black),
-    ),
-    ),
-    //Align(alignment: Alignment.bottomCenter,child:SliderButton(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    type: PageTransitionType.fade,
+                                    child: CoursesPage(),
+                                    alignment: Alignment.center));
+                          },
+                          child: const Text('Get Started'),
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.black),
+                          ),
+                        ),
+                      ),
+                      //Align(alignment: Alignment.bottomCenter,child:SliderButton(
                       //
                       //     buttonColor: Colors.black38,
                       //     backgroundColor: Colors.black12,
@@ -122,7 +127,7 @@ class _pageScaffoldState extends State<pageScaffold> {
                       //
                       //
                       // )
-                   //   ),
+                      //   ),
                     )
                   ],
                 ),
@@ -130,17 +135,14 @@ class _pageScaffoldState extends State<pageScaffold> {
             ],
             onPageChanged: (int index) {
               setState(() {
-                currPage = index ;
+                currPage = index;
               });
             },
           ),
-
         ],
-
       ),
     );
     // ),
-
   }
 }
 
@@ -164,9 +166,12 @@ Widget homePageBody(BuildContext context) {
           height: 80,
           child: ElevatedButton(
             onPressed: () {
-
-
-              Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: CoursesPage(),alignment: Alignment.center));
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.fade,
+                      child: CoursesPage(),
+                      alignment: Alignment.center));
             },
             child: const Text('Get Started'),
             style: ButtonStyle(
@@ -178,4 +183,3 @@ Widget homePageBody(BuildContext context) {
     ),
   );
 }
-

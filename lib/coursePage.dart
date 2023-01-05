@@ -52,7 +52,9 @@ class _coursePageState extends State<coursePage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
+            _coursePageState().initState() ;
             Navigator.pop(context);
+
           },
         ),
         backgroundColor: Color.fromRGBO(0, 171, 179, 2),
@@ -148,6 +150,7 @@ class _coursePageState extends State<coursePage> {
     String contentWeight = '';
     String contentType = '';
     TextEditingController contentWeightController = TextEditingController();
+    TextEditingController contentNameController = TextEditingController();
 
     return FloatingActionButton(
       backgroundColor: ReusableWidgets().getButtonsColor(),
@@ -163,58 +166,58 @@ class _coursePageState extends State<coursePage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // TextFormField(
-                      //     // controller: ,
-                      //     decoration: InputDecoration(
-                      //   labelText: "Name",
-                      // )),
+                      TextFormField(
+                           controller: contentNameController,
+                          decoration: InputDecoration(
+                        labelText: "Name",
+                      )),
                       TextFormField(
                           controller: contentWeightController,
                           decoration: InputDecoration(
                             labelText: "Weight (in %)",
                           )),
-                      DropdownButtonFormField(
-
-                          // value: contentType,
-                          decoration: InputDecoration(
-                            labelText: "Type",
-                          ),
-                          items: [
-                            DropdownMenuItem(
-                              child: Text("Assignment"),
-                              value: "Assignment",
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Quizzes"),
-                              value: "Quizzes",
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Midterm"),
-                              value: "Midterm",
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Project"),
-                              value: "Project",
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Final"),
-                              value: "Final",
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Test"),
-                              value: "Tests",
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Labs"),
-                              value: "Labs",
-                            ),
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              contentType = value.toString();
-                              //      _selectedType = value;
-                            });
-                          })
+                      // DropdownButtonFormField(
+                      //
+                      //     // value: contentType,
+                      //     decoration: InputDecoration(
+                      //       labelText: "Type",
+                      //     ),
+                      //     items: [
+                      //       DropdownMenuItem(
+                      //         child: Text("Assignment"),
+                      //         value: "Assignment",
+                      //       ),
+                      //       DropdownMenuItem(
+                      //         child: Text("Quizzes"),
+                      //         value: "Quizzes",
+                      //       ),
+                      //       DropdownMenuItem(
+                      //         child: Text("Midterm"),
+                      //         value: "Midterm",
+                      //       ),
+                      //       DropdownMenuItem(
+                      //         child: Text("Project"),
+                      //         value: "Project",
+                      //       ),
+                      //       DropdownMenuItem(
+                      //         child: Text("Final"),
+                      //         value: "Final",
+                      //       ),
+                      //       DropdownMenuItem(
+                      //         child: Text("Test"),
+                      //         value: "Tests",
+                      //       ),
+                      //       DropdownMenuItem(
+                      //         child: Text("Labs"),
+                      //         value: "Labs",
+                      //       ),
+                      //     ],
+                      //     onChanged: (value) {
+                      //       setState(() {
+                      //         contentType = value.toString();
+                      //         //      _selectedType = value;
+                      //       });
+                      //     })
                     ],
                   ),
                 ),
@@ -235,13 +238,13 @@ class _coursePageState extends State<coursePage> {
                     ),
                     onPressed: () async {
                       // Database? db = (await database().db) ;
-
-                      if (contentType.isNotEmpty &&
+                      print(contentNameController.text);
+                      if (contentNameController.text.isNotEmpty &&
                           contentWeightController.text.isNotEmpty) {
                         if (widget.course.isFeaseable(
                             double.parse(contentWeightController.text))) {
                           widget.course.addAssesment(new Content(
-                              contentType,
+                              contentNameController.text,
                               double.parse(contentWeightController.text),
                               [],
                               0,
@@ -249,7 +252,7 @@ class _coursePageState extends State<coursePage> {
                           contentDatabase().addContent(
                               widget.course,
                               new Content(
-                                  contentType,
+                                  contentNameController.text,
                                   double.parse(contentWeightController.text),
                                   [],
                                   0,

@@ -20,10 +20,11 @@ class _CoursesPageState extends State<CoursesPage> {
   @override
   void initState() {
     super.initState();
-    _loadCourses();
+    loadCourses() ;
+
   }
 
-  void _loadCourses() async {
+  void loadCourses() async {
     Database? db = (await database().db)  ;
     final courses = await database().getCourses();
 
@@ -72,7 +73,7 @@ class _CoursesPageState extends State<CoursesPage> {
                     InkWell(
                       child: Card(
 
-                        color: Colors.black45,
+                        color:Colors.primaries[index % Colors.primaries.length],
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
