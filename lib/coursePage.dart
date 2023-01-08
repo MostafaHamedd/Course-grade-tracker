@@ -284,6 +284,7 @@ class _coursePageState extends State<coursePage> {
   }
 
   Widget courseContent() {
+
     return SingleChildScrollView(
       child: Column(
         children: [

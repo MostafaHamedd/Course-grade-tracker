@@ -62,68 +62,78 @@ class _CoursesPageState extends State<CoursesPage> {
       floatingActionButton: myFloatingButton(),
        appBar: ReusableWidgets().appBar("Courses"),
       backgroundColor: ReusableWidgets().getBackgroundColor(),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: ListView.builder(
-              itemCount: _courses.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    InkWell(
-                      child: Card(
+      body: getHomePage(),
+    );
+  }
+  Widget getHomePage(){
+    if(_courses.length!=0){
+      return coursesHomePage() ;
+    }
+    return Center(child: Text("No courses added yet",style: TextStyle(fontSize: 30),),);
+  }
+  Widget coursesHomePage(){
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: ListView.builder(
+            itemCount: _courses.length,
+            itemBuilder: (context, index) {
+              return Column(
+                children: [
+                  InkWell(
+                    child: Card(
 
-                        color:Colors.primaries[index % Colors.primaries.length],
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        elevation: 5.0,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Align(alignment: Alignment.topLeft,child: Text(_courses[index].name, style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 25),)),
-                                  Align(
-                                    child:PopupMenuButton(
-                                      color: Colors.grey,
-                                      icon: Icon(Icons.more_vert),
-                                      onSelected: (value) {
-                                        if(value==1){
-                                          deleteCourse(_courses[index]) ;
-                                          setState(() {
+                      color:Colors.primaries[index % Colors.primaries.length],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      elevation: 5.0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Align(alignment: Alignment.topLeft,child: Text(_courses[index].name, style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 25),)),
+                                Align(
+                                  child:PopupMenuButton(
+                                    color: Colors.grey,
+                                    icon: Icon(Icons.more_vert),
+                                    onSelected: (value) {
+                                      if(value==1){
+                                        deleteCourse(_courses[index]) ;
+                                        setState(() {
 
-                                          });
-                                        }
-                                      },
-                                      itemBuilder: (BuildContext context) {
-                                        return [
-                                          PopupMenuItem(
-                                            value: 1,
-                                            child: Row(
-                                              children: [
+                                        });
+                                      }
+                                    },
+                                    itemBuilder: (BuildContext context) {
+                                      return [
+                                        PopupMenuItem(
+                                          value: 1,
+                                          child: Row(
+                                            children: [
 
-                                                Text('Delete'),
-                                                Spacer(),
-                                                Icon(Icons.delete)
-                                              ],
-                                            ),
+                                              Text('Delete'),
+                                              Spacer(),
+                                              Icon(Icons.delete)
+                                            ],
                                           ),
+                                        ),
 
-                                        ];
-                                      },
-                                    ),
-
-
-                                    alignment: Alignment.topRight,
+                                      ];
+                                    },
                                   ),
-                                ],
-                              ),
+
+
+                                  alignment: Alignment.topRight,
+                                ),
+                              ],
+                            ),
 
 
                             Align(
@@ -131,73 +141,72 @@ class _CoursesPageState extends State<CoursesPage> {
                               child: Text("Average:",
                                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                             ),
-                              Divider(height: 5,),
+                            Divider(height: 5,),
 
-                              Stack(
-                                children: [
-                                  LinearProgressIndicator(
-                                    value: (_courses[index].getAverageGrade() /
-                                        100), // currentGrade is the current percentage of the grades, divided by 100 to convert it to a value between 0 and 1
-                                    backgroundColor: ReusableWidgets().progressBarBackgroundColor(),
+                            Stack(
+                              children: [
+                                LinearProgressIndicator(
+                                  value: (_courses[index].getAverageGrade() /
+                                      100), // currentGrade is the current percentage of the grades, divided by 100 to convert it to a value between 0 and 1
+                                  backgroundColor: ReusableWidgets().progressBarBackgroundColor(),
 
-                                    valueColor:
-                                    AlwaysStoppedAnimation(ReusableWidgets().progressBarValueColor()),
-                                    minHeight: 30,
-                                  ),
+                                  valueColor:
+                                  AlwaysStoppedAnimation(ReusableWidgets().progressBarValueColor()),
+                                  minHeight: 30,
+                                ),
 
-                                  Center(
-                                    child: Text(_courses[index].getScore(_courses[index].getAverageGrade()),
-                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 40,)
-                            ],
-                          ),
+                                Center(
+                                  child: Text(_courses[index].getScore(_courses[index].getAverageGrade()),
+                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 40,)
+                          ],
                         ),
                       ),
-                      onTap: (){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => coursePage(
-                                  course: _courses[index],
-
-                                ) ));
-                      },
                     ),
-                    SizedBox(height: 20,)
-                  ],
-                );
-              },
-            ),
+                    onTap: (){
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => coursePage(
+                                course: _courses[index],
+
+                              ) ));
+                    },
+                  ),
+                  SizedBox(height: 20,)
+                ],
+              );
+            },
           ),
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: TextField(
-          //     decoration: InputDecoration(
-          //       labelText: "Add a new course",
-          //     ),
-          //     onChanged: (value) {
-          //       _newCourse = Course(value, [],0);
-          //     },
-          //   ),
-          // ),
-          // ElevatedButton(
-          //   style: ElevatedButton.styleFrom(
-          //   primary: ReusableWidgets().getButtonsColor()
-          //   ),
-          //
-          //   child: Text("Add Course"),
-          //   onPressed: () {
-          //     setState(() {
-          //       _courses.add(_newCourse);
-          //     });
-          //   },
-          // ),
-         // Divider(height: 50,)
-        ],
-      ),
+        ),
+        // Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: TextField(
+        //     decoration: InputDecoration(
+        //       labelText: "Add a new course",
+        //     ),
+        //     onChanged: (value) {
+        //       _newCourse = Course(value, [],0);
+        //     },
+        //   ),
+        // ),
+        // ElevatedButton(
+        //   style: ElevatedButton.styleFrom(
+        //   primary: ReusableWidgets().getButtonsColor()
+        //   ),
+        //
+        //   child: Text("Add Course"),
+        //   onPressed: () {
+        //     setState(() {
+        //       _courses.add(_newCourse);
+        //     });
+        //   },
+        // ),
+        // Divider(height: 50,)
+      ],
     );
   }
   Widget myFloatingButton(){
@@ -267,7 +276,9 @@ class _CoursesPageState extends State<CoursesPage> {
 
   void deleteCourse(Course course){
     _courses.remove(course);
-   contentDatabase().deleteContents(course) ;
+    if(contentDatabase().isInitialized()){
+      contentDatabase().deleteContents(course) ;
+    }
    database().deleteCourse(course.name) ;
 
   }

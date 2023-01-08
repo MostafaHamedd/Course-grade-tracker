@@ -24,6 +24,9 @@ class contentDatabase{
     }
 
   }
+  bool isInitialized(){
+    return _contentDb!=null ;
+  }
 
 
 

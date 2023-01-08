@@ -48,30 +48,91 @@ class _pageScaffoldState extends State<pageScaffold> {
         children: [
           PageView(
             children: [
-              Card(
-                color: Colors.blueAccent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: Column(
-                  children: [
-                    // Image.asset(),
-                    Text("Feature 1"),
-                    Text("Description of Feature 1"),
-                  ],
-                ),
+              Stack(
+                children: [
+                  Card(
+                    color: Colors.blueAccent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Stack(
+                      children: [
+                        // Image.asset(),
+
+                        Center(
+                          child: Column(
+                            children: [
+                              Text("Feature 1",style: TextStyle(fontSize: 20),),
+                              Text("Description of Feature 1",style: TextStyle(fontSize: 20),),
+                            //  Align(alignment: Alignment.bottomCenter,child: ElevatedButton(onPressed: (){}, child: Text("Skip")),)
+
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              width: 100,
+                              height: 50,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      PageTransition(
+                                          type: PageTransitionType.fade,
+                                          child: CoursesPage(),
+                                          alignment: Alignment.center));
+                                },
+                                child: const Text('Skip',style: TextStyle(fontSize: 20),),
+                                style: ButtonStyle(
+
+                                  backgroundColor:
+                                  MaterialStateProperty.all(Colors.black),
+                                ),
+                              ),
+                            ),
+                          ),
+                          //Align(alignment: Alignment.bottomCenter,child:SliderButton(
+                          //
+                          //     buttonColor: Colors.black38,
+                          //     backgroundColor: Colors.black12,
+                          //     action: () {
+                          //       ///Do something here
+                          //       Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: CoursesPage(),alignment: Alignment.center));
+                          //     },
+                          //     label: Text(
+                          //       "Get Started!       ",
+                          //       style: TextStyle(
+                          //           color: Color(0xff4a4a4a), fontWeight: FontWeight.w500, fontSize: 17),
+                          //     ),
+                          //     icon: Icon(Icons.navigate_next,size: 50,)
+                          //
+                          //
+                          // )
+                          //   ),
+                        )
+
+                      ],
+                    ),
+                  ),
+
+                ],
               ),
               Card(
                 color: Colors.orange,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                child: Column(
-                  children: [
-                    //Image.asset("feature2.jpg"),
-                    Text("Feature 2"),
-                    Text("Description of Feature 2"),
-                  ],
+                child: Center(
+                  child: Column(
+                    children: [
+                      //Image.asset("feature2.jpg"),
+                      Text("Feature 2",style: TextStyle(fontSize: 20),),
+                      Text("Description of Feature 2",style: TextStyle(fontSize: 20),),
+                    ],
+                  ),
                 ),
               ),
               Card(
@@ -85,8 +146,8 @@ class _pageScaffoldState extends State<pageScaffold> {
                       child: Column(
                         children: [
                           //Image.asset("feature3.jpg"),
-                          Text("Feature 3"),
-                          Text("Description of Feature 3"),
+                          Text("Feature 3",style: TextStyle(fontSize: 20),),
+                          Text("Description of Feature 3",style: TextStyle(fontSize: 20),),
                         ],
                       ),
                     ),
