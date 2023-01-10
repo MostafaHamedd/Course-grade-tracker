@@ -30,12 +30,23 @@
 
 ![(Main page)](https://github.com/Tellmore01/Course-grade-tracker/blob/961a84f89ef4e9f50de51c2536067ca385d66bdb/assets/images/courses_main_screen.png)
 
-## 1) Add a course
+## 2) Add a course
 
-## 1) View the course
+![(Course page)](https://github.com/Tellmore01/Course-grade-tracker/blob/master/assets/images/adding_course.png)
+![(Course page)](https://github.com/Tellmore01/Course-grade-tracker/blob/master/assets/images/course_added.png)
 
-## 1) Add assesments
+## 3) View the course
 
-## 1) Type in your grades
+![(View course page)](https://github.com/Tellmore01/Course-grade-tracker/blob/master/assets/images/course_page.png)
 
-## 1) Set a target grade!
+## 4) Add assesments
+
+![(Adding assesments)][(https://github.com/tellmore01/course-grade-tracker/blob/961a84f89ef4e9f50de51c2536067ca385d66bdb/assets/images/courses_main_screen.png](https://github.com/Tellmore01/Course-grade-tracker/blob/master/assets/images/adding_assesment.png))
+
+## 5) Type in your grades
+
+![()](https://github.com/Tellmore01/Course-grade-tracker/blob/master/assets/images/assesments_added.png)
+
+## 6) Set a target grade!
+
+![()](https://github.com/Tellmore01/Course-grade-tracker/blob/master/assets/images/targetGrade_set.png)
