@@ -49,4 +49,4 @@
 
 ## 6) Set a target grade!
 
-![()](https://github.com/Tellmore01/Course-grade-tracker/blob/master/assets/images/targetGrade_set.png)
+![()](https://github.com/Tellmore01/Course-grade-tracker/blob/master/assets/images/target_grade_set.png)
