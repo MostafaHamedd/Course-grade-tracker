@@ -39,9 +39,9 @@
 
 ![(View course page)](https://github.com/Tellmore01/Course-grade-tracker/blob/master/assets/images/course_page.png)
 
-## 4) Add assesments
+## 4) Add assessments
 
-![(Adding assesments)][(https://github.com/tellmore01/course-grade-tracker/blob/961a84f89ef4e9f50de51c2536067ca385d66bdb/assets/images/courses_main_screen.png](https://github.com/Tellmore01/Course-grade-tracker/blob/master/assets/images/adding_assesment.png))
+![(Adding assessments)](https://github.com/Tellmore01/Course-grade-tracker/blob/master/assets/images/adding_assesment.png)
 
 ## 5) Type in your grades
 
