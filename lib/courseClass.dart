@@ -92,8 +92,10 @@ class Course {
       }
       gradeLeft = 100 - totalWeight ;
       scoreNeeded = (desiredGrade - totalEarned) ;
+      if(gradeLeft!=0){
+        scoreNeeded=scoreNeeded/gradeLeft ;
+      }
 
-      scoreNeeded=scoreNeeded/gradeLeft ;
       scoreNeeded*=100 ;
 
      // print("$scoreNeeded Testing output");

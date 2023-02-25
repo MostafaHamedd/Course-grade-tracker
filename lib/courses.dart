@@ -20,11 +20,11 @@ class _CoursesPageState extends State<CoursesPage> {
   @override
   void initState() {
     super.initState();
-    loadCourses() ;
+    _loadCourses() ;
 
   }
 
-  void loadCourses() async {
+  void _loadCourses() async {
     Database? db = (await database().db)  ;
     final courses = await database().getCourses();
 

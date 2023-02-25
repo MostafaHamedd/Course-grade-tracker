@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:tellmore_course_tracker/courseClass.dart';
+import 'courses.dart';
 import 'reusableWidgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dataBase.dart';
@@ -24,10 +25,12 @@ class coursePage extends StatefulWidget {
 class _coursePageState extends State<coursePage> {
   String testGrade = "0";
 
+
   @override
   void initState() {
     super.initState();
-    //_loadContents();
+    _loadContents();
+
   }
 
   void _loadContents() async {
@@ -52,8 +55,10 @@ class _coursePageState extends State<coursePage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            _coursePageState().initState() ;
-            Navigator.pop(context);
+           //  print("back pressed") ;
+          //  _coursePageState().initState();
+           // Navigator.pop(context);
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>CoursesPage() ,));
 
           },
         ),
@@ -279,6 +284,9 @@ class _coursePageState extends State<coursePage> {
   String getGrade() {
     if (!widget.course.isCalculated) {
       return "";
+    }
+    if(widget.course.gradeNeeded(widget.course.desiredGrade) <= 0){
+      return "Already Achieved" ;
     }
     return widget.course.getScore(widget.course.gradeNeeded(widget.course.desiredGrade)).toString();
   }
