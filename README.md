@@ -1,6 +1,6 @@
 # Course Tracker App
 
-#### This Flutter app helps students keep track of their courses and progress. students can add a course, specify their target grade and the app will calculate what they need to score on future assessments in order to reach their 
+#### This Flutter app helps students keep track of their courses and progress. students can add a course, specify their target grade and the app will calculate what they need to score on future assessments in order to reach their target grade!
 ## How to use it
 
 1. ### Open main page
